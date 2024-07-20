@@ -34,3 +34,7 @@ class Profile(models.Model):  #yash
         return self.user.username
     
 
+class UserHistory(models.Model): #yash
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    garden = models.ForeignKey(CommunityGarden, on_delete=models.CASCADE)
+    visited_at = models.DateTimeField(auto_now_add=True)

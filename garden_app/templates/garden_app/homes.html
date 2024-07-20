@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content">
+    <div class="post-section">
+        <h2>All Posts</h2>
+        {% for upload in uploads %}
+        <div class="post-card">
+            {% if upload.photo %}
+            <img src="{{ upload.photo.url }}" alt="Upload Image" class="post-image">
+            {% endif %}
+            <p>{{ upload.tip }}</p>
+            <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

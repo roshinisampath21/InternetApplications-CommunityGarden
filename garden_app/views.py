@@ -76,3 +76,23 @@ def delete_upload(request, upload_id):
         return redirect('homes')
     return render(request, 'garden_app/delete_upload.html', {'upload': upload})
 
+
+@login_required
+def add_post(request, group_id): #yash
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    if request.user not in group.members.all():
+        return HttpResponseForbidden("You are not allowed to post in this group.")
+
+    if request.method == 'POST':
+        form = GroupPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.group = group
+            post.author = request.user
+            post.save()
+            return redirect('group_detail', group_id=group.id)
+    else:
+        form = GroupPostForm()
+
+    return render(request, 'garden_app/add_post.html', {'form': form, 'group': group})
+

@@ -64,3 +64,15 @@ def upload(request):
     else:
         form = UploadForm()
     return render(request, 'garden_app/upload.html', {'form': form})
+
+
+@login_required #yash
+def delete_upload(request, upload_id):
+    upload = get_object_or_404(Upload, id=upload_id)
+    if upload.user != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+    if request.method == 'POST':
+        upload.delete()
+        return redirect('homes')
+    return render(request, 'garden_app/delete_upload.html', {'upload': upload})
+

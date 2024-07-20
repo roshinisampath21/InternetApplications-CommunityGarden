@@ -22,3 +22,15 @@ class Post(models.Model): #rosh
 
     def __str__(self):
         return f"{self.author.username} - {self.created_at}"
+    
+
+class Profile(models.Model):  #yash
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+    
+

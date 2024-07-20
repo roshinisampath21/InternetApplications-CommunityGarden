@@ -96,3 +96,13 @@ def add_post(request, group_id): #yash
 
     return render(request, 'garden_app/add_post.html', {'form': form, 'group': group})
 
+@login_required #yash
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.author != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+    if request.method == 'POST':
+        post.delete()
+        return redirect('group_detail', group_id=post.group.id)
+    return render(request, 'garden_app/delete_post.html', {'post': post})
+

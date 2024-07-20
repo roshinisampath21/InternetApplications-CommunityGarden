@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="sidebar">
+    <a href="{% url 'create_group' %}" class="btn btn-primary btn-block">Create Group</a>
+    <a href="{% url 'groups_list' %}" class="btn btn-secondary btn-block">List Groups</a>
+    <a href="{% url 'profile' %}" class="btn btn-info btn-block">Profile</a>
+    <form id="logout-form" method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-block">Logout</button>
+    </form>
+    <a href="{% url 'upload' %}" class="btn btn-success btn-block">Post a Blog</a>
+</div>
+
+<div class="main-content">
+    <div class="post-section">
+        <h2>Image Posts</h2>
+        {% for upload in image_posts %}
+        {% if upload.photo %}
+        <div class="post-card">
+            <img src="{{ upload.photo.url }}" alt="Upload Image" class="post-image">
+            <p>{{ upload.tip }}</p>
+            <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
+            {% if upload.user == user %}
+            <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="sidebar-right">
+    <h2>Text Posts</h2>
+    {% for upload in image_posts %}
+    {% if not upload.photo %}
+    <div class="post-card">
+        <p>{{ upload.tip }}</p>
+        <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
+        {% if upload.user == user %}
+            <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Blog Post Modal -->
+<div class="modal fade" id="postBlogModal" tabindex="-1" role="dialog" aria-labelledby="postBlogModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postBlogModalLabel">Post a Blog</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#postBlogButton').click(function(){
+            $('#postBlogModal').modal('show');
+        });
+    });
+</script>
+
+{% endblock %}

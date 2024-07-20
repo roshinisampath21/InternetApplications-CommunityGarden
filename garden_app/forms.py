@@ -18,3 +18,9 @@ class UserUpdateForm(forms.ModelForm): #rosh
     class Meta:
         model = User
         fields = ['username', 'email']
+
+
+class ProfileForm(forms.ModelForm): #yash
+    class Meta:
+        model = Profile
+        fields = ['picture', 'bio', 'location']

@@ -96,6 +96,7 @@ def add_post(request, group_id): #yash
 
     return render(request, 'garden_app/add_post.html', {'form': form, 'group': group})
 
+
 @login_required #yash
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -105,4 +106,15 @@ def delete_post(request, post_id):
         post.delete()
         return redirect('group_detail', group_id=post.group.id)
     return render(request, 'garden_app/delete_post.html', {'post': post})
+
+
+@login_required #yash
+def user_history(request):
+    total_visits = request.session.get('total_visits', 0)
+    daily_visits = request.session.get('daily_visits', {})
+    return render(request, 'garden_app/user_history.html', {
+        'total_visits': total_visits,
+        'daily_visits': daily_visits
+    })
+
 

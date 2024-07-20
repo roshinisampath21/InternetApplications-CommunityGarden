@@ -1,0 +1,20 @@
+<!-- garden_app/templates/garden_app/user_history.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}
+    User History
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>User History</h1>
+        <p>Total Visits: {{ total_visits }}</p>
+        <h2>Daily Visits</h2>
+        <ul>
+            {% for date, visits in daily_visits.items %}
+                <li>{{ date }}: {{ visits }} visits</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -19,6 +19,7 @@ class UserUpdateForm(forms.ModelForm): #rosh
         model = User
         fields = ['username', 'email']
 
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
@@ -30,3 +31,10 @@ class LoginForm(AuthenticationForm):
         'placeholder': 'Password',
         'required': 'required'
     }))
+
+
+class ProfileForm(forms.ModelForm): #yash
+    class Meta:
+        model = Profile
+        fields = ['picture', 'bio', 'location']
+

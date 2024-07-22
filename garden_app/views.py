@@ -66,5 +66,59 @@ def upload(request):
         form = UploadForm()
     return render(request, 'garden_app/upload.html', {'form': form})
 
+
 class CustomLoginView(LoginView):
     authentication_form = LoginForm
+
+
+@login_required #yash
+def delete_upload(request, upload_id):
+    upload = get_object_or_404(Upload, id=upload_id)
+    if upload.user != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+    if request.method == 'POST':
+        upload.delete()
+        return redirect('homes')
+    return render(request, 'garden_app/delete_upload.html', {'upload': upload})
+
+
+@login_required
+def add_post(request, group_id): #yash
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    if request.user not in group.members.all():
+        return HttpResponseForbidden("You are not allowed to post in this group.")
+
+    if request.method == 'POST':
+        form = GroupPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.group = group
+            post.author = request.user
+            post.save()
+            return redirect('group_detail', group_id=group.id)
+    else:
+        form = GroupPostForm()
+
+    return render(request, 'garden_app/add_post.html', {'form': form, 'group': group})
+
+
+@login_required #yash
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.author != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+    if request.method == 'POST':
+        post.delete()
+        return redirect('group_detail', group_id=post.group.id)
+    return render(request, 'garden_app/delete_post.html', {'post': post})
+
+
+@login_required #yash
+def user_history(request):
+    total_visits = request.session.get('total_visits', 0)
+    daily_visits = request.session.get('daily_visits', {})
+    return render(request, 'garden_app/user_history.html', {
+        'total_visits': total_visits,
+        'daily_visits': daily_visits
+    })
+

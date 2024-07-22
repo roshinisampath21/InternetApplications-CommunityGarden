@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="group-header">
+        <h1>{{ group.name }}</h1>
+        <a href="{% url 'group_about' group.id %}">About</a>
+        {% if user == group.created_by %}
+        <form method="post" action="{% url 'delete_group' group.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Group</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="posts-grid">
+        {% for post in group.posts.all %}
+        <div class="post-card">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" class="post-image" alt="Post Image">
+            {% endif %}
+            <p>{{ post.text }}</p>
+            <p class="text-muted">Posted by {{ post.author.username }} on {{ post.created_at }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_member %}
+    <div class="add-post text-center">
+        <h2>Add a New Post</h2>
+        <button id="addPostButton" class="btn btn-primary">Add a Post</button>
+    </div>
+    {% else %}
+    <p>You must be a member of this group to post.</p>
+    {% endif %}
+</div>
+
+<!-- Custom Modal -->
+<div id="customModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <span class="custom-modal-close">&times;</span>
+        <h5>Add a Post</h5>
+        <form id="post-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Post</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modal = document.getElementById("customModal");
+        var btn = document.getElementById("addPostButton");
+        var span = document.getElementsByClassName("custom-modal-close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
+</script>
+{% endblock %}

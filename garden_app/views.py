@@ -117,9 +117,11 @@ def delete_post(request, post_id):
 def user_history(request):
     total_visits = request.session.get('total_visits', 0)
     daily_visits = request.session.get('daily_visits', {})
+    last_visit_date = request.session.get('last_visit_date', None)
     return render(request, 'garden_app/user_history.html', {
         'total_visits': total_visits,
-        'daily_visits': daily_visits
+        'daily_visits': daily_visits,
+        'last_visit_date': last_visit_date
     })
 
 @login_required

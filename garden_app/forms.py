@@ -38,3 +38,7 @@ class ProfileForm(forms.ModelForm): #yash
         model = Profile
         fields = ['picture', 'bio', 'location']
 
+class GroupPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['text', 'image']

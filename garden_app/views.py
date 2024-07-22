@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Upload, Post, Profile, GardeningGroup
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import GroupPostForm,UserUpdateForm, ProfileForm
+from .forms import GroupPostForm,UserUpdateForm, ProfileForm, LoginForm
 from django.http import HttpResponseForbidden
+from django.contrib.auth.views import LoginView
 
 def homes(request): #rosh
     if request.user.is_authenticated:
@@ -64,3 +65,6 @@ def upload(request):
     else:
         form = UploadForm()
     return render(request, 'garden_app/upload.html', {'form': form})
+
+class CustomLoginView(LoginView):
+    authentication_form = LoginForm

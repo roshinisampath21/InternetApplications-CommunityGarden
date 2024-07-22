@@ -15,7 +15,7 @@ class TrackUserVisitsMiddleware(MiddlewareMixin):
         # Update total visits
         request.session['total_visits'] += 1
 
-        # Update daily visits
+        # Update daily visit
         if current_date in request.session['daily_visits']:
             request.session['daily_visits'][current_date] += 1
         else:

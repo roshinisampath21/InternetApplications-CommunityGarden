@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">{{ group.name }}</h1>
+    <div class="card">
+        <img src="{{ group.image.url }}" class="card-img-top" alt="Group Image">
+        <div class="card-body">
+            <p class="card-text">{{ group.description }}</p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'leave_group' group.id %}" class="btn btn-danger">Leave Group</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

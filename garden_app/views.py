@@ -32,7 +32,7 @@ def register(request): #rosh
             return redirect('homes')
     else:
         form = UserRegisterForm()
-    return render(request, 'garden_app/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 
 @login_required #rosh

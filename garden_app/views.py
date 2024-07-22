@@ -122,3 +122,31 @@ def user_history(request):
         'daily_visits': daily_visits
     })
 
+@login_required
+def join_group(request, group_id):  #rehaan
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    group.members.add(request.user)
+    return redirect('group_detail', group_id=group_id)
+
+@login_required
+def leave_group(request, group_id):  #rehaan
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    group.members.remove(request.user)
+    return redirect('group_detail', group_id=group_id)
+
+@login_required
+def group_about(request, group_id):  #rehaan
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    return render(request, 'garden_app/group_about.html', {'group': group})
+
+
+def edit_profile(request):  #rehaan
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+
+    return render(request, 'garden_app/edit_profile.html', {'form': form})

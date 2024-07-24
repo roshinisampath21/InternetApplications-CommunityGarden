@@ -214,3 +214,16 @@ def delete_group(request, group_id): #smit
         group.delete()
         return redirect('groups_list')
     return render(request, 'garden_app/delete_group.html', {'group': group})
+
+@login_required #smit
+def create_group(request):
+    if request.method == 'POST':
+        form = GardeningGroupForm(request.POST, request.FILES)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.created_by = request.user
+            group.save()
+            return redirect('groups_list')
+    else:
+        form = GardeningGroupForm()
+    return render(request, 'garden_app/create_group.html', {'form': form})

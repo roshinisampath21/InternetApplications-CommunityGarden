@@ -154,3 +154,7 @@ def edit_profile(request):  #rehaan
     return render(request, 'garden_app/edit_profile.html', {'form': form})
 
 # Git Check
+def logout_view(request):  #smit
+    logout(request)
+    print("check")
+    return redirect('homes')

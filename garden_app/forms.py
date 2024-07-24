@@ -42,3 +42,11 @@ class GroupPostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['text', 'image']
+
+class UploadForm(forms.ModelForm): #smit
+    class Meta:
+        model = Upload
+        fields = ['photo', 'tip']
+        widgets = {
+            'photo': forms.ClearableFileInput(attrs={'required': False}),
+        }

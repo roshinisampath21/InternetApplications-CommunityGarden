@@ -186,3 +186,21 @@ def group_detail(request, group_id):
     posts = group.posts.all()
     is_member = request.user in group.members.all()
     
+    if request.method == 'POST' and is_member:
+        form = GroupPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.group = group
+            post.author = request.user
+            post.save()
+            return redirect('group_detail', group_id=group.id)
+    else:
+        form = GroupPostForm()
+
+    return render(request, 'garden_app/group_detail.html', {
+        'group': group,
+        'posts': posts,
+        'form': form,
+        'is_member': is_member,
+        'user': request.user
+    })

@@ -38,3 +38,13 @@ class UserHistory(models.Model): #yash
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     garden = models.ForeignKey(CommunityGarden, on_delete=models.CASCADE)
     visited_at = models.DateTimeField(auto_now_add=True)
+
+class GardeningGroup(models.Model): #smit
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='group_images/', blank=True, null=True)
+    members = models.ManyToManyField(User, related_name='gardening_groups', blank=True)
+    created_by = models.ForeignKey(User, related_name='created_groups', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

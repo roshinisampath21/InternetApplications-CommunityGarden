@@ -158,3 +158,17 @@ def logout_view(request):  #smit
     logout(request)
     print("check")
     return redirect('homes')
+
+def groups_list(request): #smit
+    query = request.GET.get('q')
+    if query:
+        groups = GardeningGroup.objects.filter(name__icontains=query)
+    else:
+        groups = GardeningGroup.objects.all()
+
+    joined_groups = request.session.get('joined_groups', [])
+    visited_gardens = request.COOKIES.get('visited_gardens', '')
+
+    
+
+    return render(request, 'garden_app/groups_list.html', context)

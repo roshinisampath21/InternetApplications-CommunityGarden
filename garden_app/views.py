@@ -169,6 +169,13 @@ def groups_list(request): #smit
     joined_groups = request.session.get('joined_groups', [])
     visited_gardens = request.COOKIES.get('visited_gardens', '')
 
-    
+    if visited_gardens:
+        visited_gardens = visited_gardens.split(',')
+
+    context = {
+        'groups': groups,
+        'joined_groups': joined_groups,
+        'visited_gardens': visited_gardens
+    }
 
     return render(request, 'garden_app/groups_list.html', context)

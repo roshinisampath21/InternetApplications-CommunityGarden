@@ -180,7 +180,9 @@ def groups_list(request): #smit
 
     return render(request, 'garden_app/groups_list.html', context)
 
+@login_required   #smit
 def group_detail(request, group_id):
     group = get_object_or_404(GardeningGroup, id=group_id)
     posts = group.posts.all()
     is_member = request.user in group.members.all()
+    

@@ -152,3 +152,78 @@ def edit_profile(request):  #rehaan
         form = ProfileForm(instance=request.user.profile)
 
     return render(request, 'garden_app/edit_profile.html', {'form': form})
+
+# Git Check
+def logout_view(request):  #smit
+    logout(request)
+    print("check")
+    return redirect('homes')
+
+def groups_list(request): #smit
+    query = request.GET.get('q')
+    if query:
+        groups = GardeningGroup.objects.filter(name__icontains=query)
+    else:
+        groups = GardeningGroup.objects.all()
+
+    joined_groups = request.session.get('joined_groups', [])
+    visited_gardens = request.COOKIES.get('visited_gardens', '')
+
+    if visited_gardens:
+        visited_gardens = visited_gardens.split(',')
+
+    context = {
+        'groups': groups,
+        'joined_groups': joined_groups,
+        'visited_gardens': visited_gardens
+    }
+
+    return render(request, 'garden_app/groups_list.html', context)
+
+@login_required   #smit
+def group_detail(request, group_id):
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    posts = group.posts.all()
+    is_member = request.user in group.members.all()
+
+    if request.method == 'POST' and is_member:
+        form = GroupPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.group = group
+            post.author = request.user
+            post.save()
+            return redirect('group_detail', group_id=group.id)
+    else:
+        form = GroupPostForm()
+
+    return render(request, 'garden_app/group_detail.html', {
+        'group': group,
+        'posts': posts,
+        'form': form,
+        'is_member': is_member,
+        'user': request.user
+    })
+
+@login_required
+def delete_group(request, group_id): #smit
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    if group.created_by != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this group.")
+    if request.method == 'POST':
+        group.delete()
+        return redirect('groups_list')
+    return render(request, 'garden_app/delete_group.html', {'group': group})
+
+@login_required #smit
+def create_group(request):
+    if request.method == 'POST':
+        form = GardeningGroupForm(request.POST, request.FILES)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.created_by = request.user
+            group.save()
+            return redirect('groups_list')
+    else:
+        form = GardeningGroupForm()
+    return render(request, 'garden_app/create_group.html', {'form': form})

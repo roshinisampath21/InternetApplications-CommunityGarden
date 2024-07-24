@@ -50,3 +50,8 @@ class UploadForm(forms.ModelForm): #smit
         widgets = {
             'photo': forms.ClearableFileInput(attrs={'required': False}),
         }
+
+class GardeningGroupForm(forms.ModelForm): #smit
+    class Meta:
+        model = GardeningGroup
+        fields = ['name', 'description', 'image']

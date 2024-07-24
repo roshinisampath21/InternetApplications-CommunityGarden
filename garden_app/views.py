@@ -152,3 +152,5 @@ def edit_profile(request):  #rehaan
         form = ProfileForm(instance=request.user.profile)
 
     return render(request, 'garden_app/edit_profile.html', {'form': form})
+
+# Git Check

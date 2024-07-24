@@ -185,7 +185,7 @@ def group_detail(request, group_id):
     group = get_object_or_404(GardeningGroup, id=group_id)
     posts = group.posts.all()
     is_member = request.user in group.members.all()
-    
+
     if request.method == 'POST' and is_member:
         form = GroupPostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -204,3 +204,13 @@ def group_detail(request, group_id):
         'is_member': is_member,
         'user': request.user
     })
+
+@login_required
+def delete_group(request, group_id): #smit
+    group = get_object_or_404(GardeningGroup, id=group_id)
+    if group.created_by != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this group.")
+    if request.method == 'POST':
+        group.delete()
+        return redirect('groups_list')
+    return render(request, 'garden_app/delete_group.html', {'group': group})

@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="main-content">
-    <div class="post-section">
-        <h2>All Posts</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">All Posts</h2>
+    <div class="row">
         {% for upload in uploads %}
-        <div class="post-card">
-            {% if upload.photo %}
-            <img src="{{ upload.photo.url }}" alt="Upload Image" class="post-image">
-            {% endif %}
-            <p>{{ upload.tip }}</p>
-            <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if upload.photo %}
+                <img src="{{ upload.photo.url }}" class="card-img-top" alt="Upload Image">
+                {% endif %}
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <p class="card-text">{{ upload.tip }}</p>
+                    <p class="text-muted">{{ upload.user.username }} - {{ upload.created_at }}</p>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
-    {% include 'garden_app/footer.html' %}
 {% endblock %}

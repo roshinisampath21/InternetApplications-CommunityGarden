@@ -24,15 +24,6 @@ class GardeningGroup(models.Model):  #smit
         return self.name
 
 
-class Upload(models.Model):  #rehaan
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='uploads/', blank=True, null=True)
-    tip = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.created_at}"
-
 
 class Post(models.Model):  #rosh
     group = models.ForeignKey(GardeningGroup, on_delete=models.CASCADE, related_name='posts')
@@ -59,3 +50,13 @@ class UserHistory(models.Model):  #yash
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     garden = models.ForeignKey(CommunityGarden, on_delete=models.CASCADE)
     visited_at = models.DateTimeField(auto_now_add=True)
+
+
+class Upload(models.Model):  #rehaan
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    tip = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.created_at}"

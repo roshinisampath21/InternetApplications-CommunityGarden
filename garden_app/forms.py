@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Upload
-from .models import GardeningGroup
+from .models import GardeningGroup, Upload
 from .models import Post
 from .models import Profile
 
@@ -42,6 +41,19 @@ class GroupPostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['text', 'image']
+
+class GardeningGroupForm(forms.ModelForm): #smit
+    class Meta:
+        model = GardeningGroup
+        fields = ['name', 'description', 'image']
+
+class UploadForm(forms.ModelForm): #smit
+    class Meta:
+        model = Upload
+        fields = ['photo', 'tip']
+        widgets = {
+            'photo': forms.ClearableFileInput(attrs={'required': False}),
+        }
 
 class UploadForm(forms.ModelForm): #smit
     class Meta:

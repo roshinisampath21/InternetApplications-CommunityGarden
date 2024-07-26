@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center my-4" style="color: black;">Create a New Group</h1>
+    <div class="form-box">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">Name:</label>
+                <input type="text" class="form-control" id="id_name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="id_description">Description:</label>
+                <textarea class="form-control" id="id_description" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="id_image">Image:</label>
+                <input type="file" class="form-control-file" id="id_image" name="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Group</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -54,16 +54,4 @@
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 
-{% block content %}
-<div class="form-container">
-    <div class="form-box">
-        <h2>Login</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
-    </div>
-</div>
-
 {% endblock %}

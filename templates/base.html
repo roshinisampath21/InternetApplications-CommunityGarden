@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Garden Network</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     {% if request.path == "/accounts/login/" or request.path == '/register/'%}
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% else %}
@@ -19,9 +21,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'homes' %}">Community Garden Network</a>
         <li class="nav-item">
+
             <button id="theme-toggle" class="btn btn-secondary">
                 <i id="theme-icon" class="fas fa-moon"></i>
             </button>
+                    <button id="theme-toggle" class="btn btn-secondary">Toggle Theme</button>
         </li>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
@@ -57,19 +61,27 @@
     <script>
         // Theme toggle logic
         const themeToggleBtn = document.getElementById('theme-toggle');
+
         const themeIcon = document.getElementById('theme-icon');
+
+
         const themeStyle = document.getElementById('theme-style');
 
         // Function to set the theme
         function setTheme(theme) {
             if (theme === 'dark') {
                 themeStyle.href = "{% static 'css/dark-theme.css' %}";
+
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
             } else {
                 themeStyle.href = "{% static 'css/styles.css' %}";
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
+
+            } else {
+                themeStyle.href = "{% static 'css/styles.css' %}";
+
             }
             localStorage.setItem('theme', theme);
         }

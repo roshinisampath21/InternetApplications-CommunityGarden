@@ -1,48 +1,64 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="sidebar">
-    <a href="{% url 'create_group' %}" class="btn btn-primary btn-block">Create Group</a>
-    <a href="{% url 'groups_list' %}" class="btn btn-secondary btn-block">List Groups</a>
-    <a href="{% url 'profile' %}" class="btn btn-info btn-block">Profile</a>
-    <form id="logout-form" method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger btn-block">Logout</button>
-    </form>
-    <a href="{% url 'upload' %}" class="btn btn-success btn-block">Post a Blog</a>
-</div>
-
-<div class="main-content">
-    <div class="post-section">
-        <h2>Image Posts</h2>
-        {% for upload in image_posts %}
-        {% if upload.photo %}
-        <div class="post-card">
-            <img src="{{ upload.photo.url }}" alt="Upload Image" class="post-image">
-            <p>{{ upload.tip }}</p>
-            <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
-            {% if upload.user == user %}
-            <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
-            {% endif %}
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="sidebar">
+                <a href="{% url 'create_group' %}" class="btn btn-primary btn-block mb-2">Create Group</a>
+                <a href="{% url 'groups_list' %}" class="btn btn-secondary btn-block mb-2">List Groups</a>
+                <a href="{% url 'profile' %}" class="btn btn-info btn-block mb-2">Profile</a>
+                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-block mb-2">Logout</button>
+                </form>
+                <a href="{% url 'upload' %}" class="btn btn-success btn-block">Post a Blog</a>
+            </div>
         </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-</div>
 
-<div class="sidebar-right">
-    <h2>Text Posts</h2>
-    {% for upload in image_posts %}
-    {% if not upload.photo %}
-    <div class="post-card">
-        <p>{{ upload.tip }}</p>
-        <p>{{ upload.user.username }} - {{ upload.created_at }}</p>
-        {% if upload.user == user %}
-            <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
-        {% endif %}
+        <div class="col-md-7">
+            <div class="main-content">
+                <h2>Image Posts</h2>
+                <div class="row">
+                    {% for upload in image_posts %}
+                    {% if upload.photo %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card w-100" style="height: 300px; overflow-y: auto;">
+                            <img src="{{ upload.photo.url }}" alt="Upload Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <p class="card-text">{{ upload.tip }}</p>
+                                <p class="text-muted">{{ upload.user.username }} - {{ upload.created_at }}</p>
+                                {% if upload.user == user %}
+                                <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="sidebar-right">
+                <h2>Text Posts</h2>
+                {% for upload in text_posts %}
+                {% if not upload.photo %}
+                <div class="card mb-4 w-100" style="height: 300px; overflow-y: auto;">
+                    <div class="card-body">
+                        <p class="card-text">{{ upload.tip }}</p>
+                        <p class="text-muted">{{ upload.user.username }} - {{ upload.created_at }}</p>
+                        {% if upload.user == user %}
+                        <a href="{% url 'delete_upload' upload.id %}" class="btn btn-danger">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    {% endif %}
-    {% endfor %}
 </div>
 
 <!-- Blog Post Modal -->

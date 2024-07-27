@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container groups-container">
+    <h1 class="text-center my-4">Groups</h1>
+    <form method="GET" action="{% url 'groups_list' %}" class="form-inline mb-4">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{ request.GET.q }}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <div class="row">
+        {% for group in groups %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <img src="{{ group.image.url }}" class="card-img-top fixed-size-img" alt="Group Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ group.name }}</h5>
+                    <p class="card-text">{{ group.description }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'group_detail' group.id %}" class="btn btn-primary mb-2">View Group</a>
+                    {% if user.is_authenticated %}
+                        {% if user in group.members.all %}
+                            <a href="{% url 'leave_group' group.id %}" class="btn btn-danger mb-2">Leave Group</a>
+                        {% else %}
+                            <a href="{% url 'join_group' group.id %}" class="btn btn-success mb-2">Join Group</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

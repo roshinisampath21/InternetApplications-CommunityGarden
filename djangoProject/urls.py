@@ -26,4 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('garden_app.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.socialaccount.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

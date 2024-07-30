@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Garden Network</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     {% if request.path == "/accounts/login/" or request.path == '/register/'%}
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% else %}
@@ -18,6 +21,10 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'homes' %}">Community Garden Network</a>
         <li class="nav-item">
+
+            <button id="theme-toggle" class="btn btn-secondary">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
                     <button id="theme-toggle" class="btn btn-secondary">Toggle Theme</button>
         </li>
         <div class="collapse navbar-collapse">
@@ -30,7 +37,7 @@
                     <li class="nav-item">
                         <form id="logout-form" method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-link nav-link" style="padding: 0;">Logout</button>
+                            <button type="submit" class="btn btn-danger btn-block mb-2" >Logout</button>
                         </form>
                     </li>
                 {% else %}
@@ -45,6 +52,8 @@
         {% block content %}{% endblock %}
     </div>
 
+    {% include 'garden_app/footer.html' %}
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/yl5t+D5L5KqEn4A5S/J2sz/bNx5CC68y6MRh5D" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq+nxGskj5l8+cz1aP1mBlIc7eu8kvak8m2PacGfh3XHPF" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgG6pFQLvZaHl7JvOt6go+RLEikcsbJqonH7f6pHj62wzDiW5LO" crossorigin="anonymous"></script>
@@ -52,14 +61,27 @@
     <script>
         // Theme toggle logic
         const themeToggleBtn = document.getElementById('theme-toggle');
+
+        const themeIcon = document.getElementById('theme-icon');
+
+
         const themeStyle = document.getElementById('theme-style');
 
         // Function to set the theme
         function setTheme(theme) {
             if (theme === 'dark') {
                 themeStyle.href = "{% static 'css/dark-theme.css' %}";
+
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
             } else {
                 themeStyle.href = "{% static 'css/styles.css' %}";
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+
+            } else {
+                themeStyle.href = "{% static 'css/styles.css' %}";
+
             }
             localStorage.setItem('theme', theme);
         }

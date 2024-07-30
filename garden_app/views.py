@@ -305,3 +305,6 @@ def create_group(request):
     else:
         form = GardeningGroupForm()
     return render(request, 'garden_app/create_group.html', {'form': form})
+
+def contact(request):
+    return render(request, 'garden_app/contact.html')

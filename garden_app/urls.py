@@ -23,5 +23,9 @@ urlpatterns = [
     path('user_history/', views.user_history, name='user_history'), 
     path('groups/<int:group_id>/add_post/', views.add_post, name='add_post'),
     path('groups/<int:group_id>/delete/', views.delete_group, name='delete_group'),
-    
+    path('about/', views.about, name='about'),
+    path('user_history/about/', views.about, name='about'),
+    path('groups/about/', views.about, name='about'),
+    path('profile/about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
     ]

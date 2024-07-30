@@ -6,21 +6,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Upload, Post, Profile, GardeningGroup
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import GroupPostForm,UserUpdateForm, ProfileForm, LoginForm
+from .forms import GroupPostForm, UserUpdateForm, ProfileForm, LoginForm
 from django.http import HttpResponseForbidden
 from django.contrib.auth.views import LoginView
 
-def homes(request): #rosh
+
+def homes(request):  #rosh
     if request.user.is_authenticated:
         image_posts = Upload.objects.filter(photo__isnull=False)
         text_posts = Upload.objects.filter(photo__isnull=False)
-        return render(request, 'garden_app/homes_logged_in.html', {'image_posts': image_posts, 'text_posts': text_posts})
+        return render(request, 'garden_app/homes_logged_in.html',
+                      {'image_posts': image_posts, 'text_posts': text_posts})
     else:
         uploads = Upload.objects.all()
         return render(request, 'garden_app/homes.html', {'uploads': uploads})
-    
-    
-def register(request): #rosh
+
+
+def register(request):  #rosh
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -35,7 +37,7 @@ def register(request): #rosh
     return render(request, 'registration/register.html', {'form': form})
 
 
-@login_required #rosh
+@login_required  #rosh
 def profile(request):
     user = request.user
     recent_posts = Post.objects.filter(author=user).order_by('-created_at')[:5]
@@ -49,7 +51,7 @@ def profile(request):
     return render(request, 'garden_app/profile.html', context)
 
 
-@login_required #rosh
+@login_required  #rosh
 def upload(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
@@ -71,7 +73,7 @@ class CustomLoginView(LoginView):
     authentication_form = LoginForm
 
 
-@login_required #yash
+@login_required  #yash
 def delete_upload(request, upload_id):
     upload = get_object_or_404(Upload, id=upload_id)
     if upload.user != request.user:
@@ -83,7 +85,7 @@ def delete_upload(request, upload_id):
 
 
 @login_required
-def add_post(request, group_id): #yash
+def add_post(request, group_id):  #yash
     group = get_object_or_404(GardeningGroup, id=group_id)
     if request.user not in group.members.all():
         return HttpResponseForbidden("You are not allowed to post in this group.")
@@ -102,7 +104,7 @@ def add_post(request, group_id): #yash
     return render(request, 'garden_app/add_post.html', {'form': form, 'group': group})
 
 
-@login_required #yash
+@login_required  #yash
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if post.author != request.user:
@@ -113,7 +115,7 @@ def delete_post(request, post_id):
     return render(request, 'garden_app/delete_post.html', {'post': post})
 
 
-@login_required #yash
+@login_required  #yash
 def user_history(request):
     total_visits = request.session.get('total_visits', 0)
     daily_visits = request.session.get('daily_visits', {})
@@ -124,17 +126,20 @@ def user_history(request):
         'last_visit_date': last_visit_date
     })
 
+
 @login_required
 def join_group(request, group_id):  #rehaan
     group = get_object_or_404(GardeningGroup, id=group_id)
     group.members.add(request.user)
     return redirect('group_detail', group_id=group_id)
 
+
 @login_required
 def leave_group(request, group_id):  #rehaan
     group = get_object_or_404(GardeningGroup, id=group_id)
     group.members.remove(request.user)
     return redirect('group_detail', group_id=group_id)
+
 
 @login_required
 def group_about(request, group_id):  #rehaan
@@ -154,7 +159,7 @@ def edit_profile(request):  #rehaan
     return render(request, 'garden_app/edit_profile.html', {'form': form})
 
 
-def groups_list(request): #smit
+def groups_list(request):  #smit
     query = request.GET.get('q')
     if query:
         groups = GardeningGroup.objects.filter(name__icontains=query)
@@ -174,6 +179,7 @@ def groups_list(request): #smit
     }
 
     return render(request, 'garden_app/groups_list.html', context)
+
 
 '''def group_detail(request, group_id):
     group = get_object_or_404(GardeningGroup, id=group_id)
@@ -182,7 +188,7 @@ def groups_list(request): #smit
 
 
 # views.py
-@login_required   #smit
+@login_required  #smit
 def group_detail(request, group_id):
     group = get_object_or_404(GardeningGroup, id=group_id)
     posts = group.posts.all()
@@ -208,7 +214,7 @@ def group_detail(request, group_id):
     })
 
 
-@login_required #smit
+@login_required  #smit
 def create_group(request):
     if request.method == 'POST':
         form = GardeningGroupForm(request.POST, request.FILES)
@@ -221,8 +227,9 @@ def create_group(request):
         form = GardeningGroupForm()
     return render(request, 'garden_app/create_group.html', {'form': form})
 
+
 @login_required
-def delete_group(request, group_id): #smit
+def delete_group(request, group_id):  #smit
     group = get_object_or_404(GardeningGroup, id=group_id)
     if group.created_by != request.user:
         return HttpResponseForbidden("You are not allowed to delete this group.")
@@ -231,13 +238,15 @@ def delete_group(request, group_id): #smit
         return redirect('groups_list')
     return render(request, 'garden_app/delete_group.html', {'group': group})
 
+
 # Git Check
 def logout_view(request):  #smit
     logout(request)
     print("check")
     return redirect('homes')
 
-def groups_list(request): #smit
+
+def groups_list(request):  #smit
     query = request.GET.get('q')
     if query:
         groups = GardeningGroup.objects.filter(name__icontains=query)
@@ -258,7 +267,8 @@ def groups_list(request): #smit
 
     return render(request, 'garden_app/groups_list.html', context)
 
-@login_required   #smit
+
+@login_required  #smit
 def group_detail(request, group_id):
     group = get_object_or_404(GardeningGroup, id=group_id)
     posts = group.posts.all()
@@ -283,8 +293,9 @@ def group_detail(request, group_id):
         'user': request.user
     })
 
+
 @login_required
-def delete_group(request, group_id): #smit
+def delete_group(request, group_id):  #smit
     group = get_object_or_404(GardeningGroup, id=group_id)
     if group.created_by != request.user:
         return HttpResponseForbidden("You are not allowed to delete this group.")
@@ -293,7 +304,8 @@ def delete_group(request, group_id): #smit
         return redirect('groups_list')
     return render(request, 'garden_app/delete_group.html', {'group': group})
 
-@login_required #smit
+
+@login_required  #smit
 def create_group(request):
     if request.method == 'POST':
         form = GardeningGroupForm(request.POST, request.FILES)
@@ -306,5 +318,10 @@ def create_group(request):
         form = GardeningGroupForm()
     return render(request, 'garden_app/create_group.html', {'form': form})
 
+
 def contact(request):
     return render(request, 'garden_app/contact.html')
+
+
+def about(request):
+    return render(request, 'garden_app/about.html')
